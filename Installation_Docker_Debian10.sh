@@ -52,7 +52,7 @@ Installation_Docker() {
 
     if [[ $? -eq 0 ]]; then
         echo "Installation effectuée ✅✅"
-        echo \n
+        echo ""
     else
         echo ${Error_Message}
         exit 0
@@ -66,7 +66,7 @@ Docker_Run_Hello_World() {
 
     if [[ $? -eq 0 ]]; then
         echo "Installation effectuée ✅✅"
-        echo \n
+        echo ""
     else
         echo ${Error_Message}
         exit 0
