@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v2.4.8
+    restart: unless-stopped
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: ingress
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - status
+
+
+  status:
+    image: valeriansaliou/vigil:v1.21.0
+    restart: unless-stopped
+    volumes:
+      - "./config.cfg:/etc/vigil.cfg"
+    networks:
+      - status
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.status.rule=Host(`status.groupe-alpha.com`)"
+      - "traefik.http.routers.status.entrypoints=web"
+
+networks:
+  status:
+    name: status
